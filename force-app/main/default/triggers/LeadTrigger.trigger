@@ -1,11 +1,15 @@
 trigger LeadTrigger on Lead (after insert) {
-    for (Lead lead : Trigger.new) {
+    List<Task> newTasks = new List<Task>();
+    
+    for (Lead newLead : Trigger.new) {
         Task newTask = new Task(
-            WhatId = lead.Id,
+            WhatId = newLead.Id,  // Set WhatId to the Lead's ID
             Subject = 'Follow up on new lead',
             Status = 'Not Started',
             Priority = 'Normal'
         );
-        insert newTask;
+        newTasks.add(newTask);
     }
+    
+    insert newTasks;
 }
