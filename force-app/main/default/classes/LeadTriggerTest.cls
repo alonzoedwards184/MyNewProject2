@@ -7,8 +7,8 @@ public class LeadTriggerTest {
         Lead testLead = new Lead(
             FirstName = 'John',
             LastName = 'Doe',
-            Company = 'Test Company',
-            Status = 'New'
+            Company = 'Test Company'
+            // Status is not provided, allowing it to remain blank/null
         );
 
         // Insert the Lead record
@@ -19,6 +19,6 @@ public class LeadTriggerTest {
         // Optionally, add assertions if needed
         // For instance, check if the Lead was inserted successfully
         Lead insertedLead = [SELECT Id, FirstName, LastName, Company, Status FROM Lead WHERE Id = :testLead.Id];
-        System.assertEquals('New', insertedLead.Status, 'Expected Lead status to be New');
+        System.assertEquals(null, insertedLead.Status, 'Expected Lead status to be null (blank)');
     }
 }
