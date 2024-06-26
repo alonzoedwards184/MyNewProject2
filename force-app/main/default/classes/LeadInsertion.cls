@@ -42,4 +42,9 @@ public class LeadInsertion {
         // Insert all leads in a single DML operation
         insert newLeads;
     }
+
+    // Method for execution through sfdx force:apex:execute
+    public static void executeInsertLeads() {
+        insertLeads(); // Call the insertLeads method
+    }
 }
