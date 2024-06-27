@@ -15,11 +15,10 @@ private class myapp_OpportunityTriggerTest {
         System.assertEquals('Prospecting', createdOpp.StageName, 'Incorrect Opportunity stage');
         
         // Verify Task creation
-        List<Task> tasks = [SELECT Id, Subject, WhatId FROM Task WHERE WhatId = :testAccount.Id AND CreatedDate >= :testStartTime];
-        System.assertEquals(2, tasks.size(), 'Expected one Task to be created.');
+        List<Task> tasks = [SELECT Id, Subject, WhatId FROM Task WHERE WhatId = :testAccount.Id];
+        System.assertEquals(1, tasks.size(), 'Expected one Task to be created.');
         
         Task createdTask = tasks[0];
         System.assertEquals('Make sure you get contact information', createdTask.Subject, 'Incorrect Task subject');
-
     }
 }
