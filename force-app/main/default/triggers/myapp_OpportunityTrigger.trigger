@@ -1,39 +1,28 @@
-trigger myapp_OpportunityTrigger on Opportunity (before insert, before update) {
-    List<Task> newTasks = new List<Task>();
-    Set<Id> accountIds = new Set<Id>();
-
-    // Collect AccountIds from Opportunities
-    for (Opportunity opp : Trigger.new) {
-        accountIds.add(opp.AccountId);
+trigger myapp_OpportunityTrigger on Account (after insert) {
+    List<Opportunity> opportunitiesToInsert = new List<Opportunity>();
+    List<Task> tasksToInsert = new List<Task>();
+    
+    for (Account acc : Trigger.new) {
+        // Create Opportunity
+        Opportunity opp = new Opportunity();
+        opp.Name = 'Great Opportunity';
+        opp.StageName = 'Prospecting';
+        opp.CloseDate = System.today().addDays(30);
+        opp.AccountId = acc.Id;
+        opportunitiesToInsert.add(opp);
+        
+        // Create Task
+        Task task = new Task();
+        task.Subject = 'Make sure you get contact information';
+        task.WhatId = acc.Id;
+        tasksToInsert.add(task);
     }
-
-    // Query Accounts related to Opportunities
-    Map<Id, Account> accountMap = new Map<Id, Account>([SELECT Id, Name FROM Account WHERE Id IN :accountIds]);
-
-    // Process Opportunities and create Tasks
-    for (Opportunity opp : Trigger.new) {
-        if (opp.Probability >= 90 && accountMap.containsKey(opp.AccountId)) {
-            Task newTask = new Task();
-            newTask.Subject = 'We are getting close!';
-            newTask.Description = 'Follow up with new account ' + accountMap.get(opp.AccountId).Name;
-            newTask.Priority = 'High';
-            newTask.WhatId = opp.Id; // Link Task to the Opportunity
-
-            newTasks.add(newTask);
-        }
+    
+    // Insert Opportunities and Tasks
+    if (!opportunitiesToInsert.isEmpty()) {
+        insert opportunitiesToInsert;
     }
-
-    // Add Tasks to the Opportunities
-    List<Opportunity> updatedOpps = new List<Opportunity>();
-    for (Opportunity opp : Trigger.new) {
-        if (opp.Probability >= 90 && accountMap.containsKey(opp.AccountId)) {
-            opp.Description = 'Created ' + newTasks.size() + ' task(s) for follow-up with account ' + accountMap.get(opp.AccountId).Name;
-            updatedOpps.add(opp);
-        }
-    }
-
-    // Update Opportunities with Task-related information
-    if (!updatedOpps.isEmpty()) {
-        update updatedOpps;
+    if (!tasksToInsert.isEmpty()) {
+        insert tasksToInsert;
     }
 }
