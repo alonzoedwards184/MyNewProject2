@@ -2,7 +2,7 @@
 private class myapp_OpportunityTriggerTest {
     @isTest static void testMyApp_OpportunityTrigger() {
         // Reset the static variable
-        MyApp_TriggerHandler.hasExecuted = false;
+        myapp_OpportunityTrigger_Test.hasExecuted = false;
         
         // Capture the current time
         Datetime testStartTime = Datetime.now();
