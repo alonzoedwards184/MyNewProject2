@@ -1,11 +1,16 @@
-public class LeadCreation {
-    public static void createNewLead(String leadName, String leadCompany, String leadTitle) {
+public class LeadInsertion {
+
+    // Method to create a new Lead
+    public static void createNewLead(String leadLastName, String leadCompany, String leadTitle) {
+        // Instantiate a new Lead object
         Lead newLead = new Lead();
 
-        newLead.LastName = leadName;
+        // Set the Lead fields
+        newLead.LastName = leadLastName;
         newLead.Company = leadCompany;
         newLead.Title = leadTitle;
 
+        // Insert the new Lead record
         try {
             insert newLead;
             System.debug('New Lead created with Name: ' + newLead.LastName);
