@@ -1,5 +1,5 @@
 @isTest
-private class myapp_TestTrigger_OpportunityCreateTask {
+private class myapp_OpportunityTrigger_Test {
     static testMethod void testTrigger_OpportunityCreateTask() {
         // Create a test opportunity
         Opportunity testOpp = new Opportunity(
