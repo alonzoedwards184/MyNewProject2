@@ -1,1 +1,1 @@
-LeadInsertion.createNewLead('Jackson', 'New Company');
+LeadInsertion.createNewLead('John Doe', 'ABC Company');
