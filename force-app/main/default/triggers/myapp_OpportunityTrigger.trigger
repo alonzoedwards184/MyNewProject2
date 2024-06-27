@@ -9,6 +9,7 @@ trigger myapp_OpportunityTrigger on Account (after insert) {
         opp.StageName = 'Prospecting';
         opp.CloseDate = System.today().addDays(30);
         opp.AccountId = acc.Id;
+        opp.Amount = '1000';
         opportunitiesToInsert.add(opp);
         
         // Create Task
