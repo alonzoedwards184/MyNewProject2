@@ -1,10 +1,11 @@
 public class AccountInsertion {
-    public static void createNewAccount(String accName, String accPhone, String accWebsite) {
+    public static void createNewAccount(String accName, String accPhone, String accWebsite, String accType) {
         Account newAccount = new Account();
 
         newAccount.Name = accName;
         newAccount.Phone = accPhone;
         newAccount.Website = accWebsite;
+        newAccount.Type = accType; // Set the Type field
 
         try {
             insert newAccount;
