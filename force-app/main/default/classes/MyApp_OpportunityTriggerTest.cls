@@ -3,7 +3,7 @@ public class MyApp_OpportunityTriggerTest {
     @IsTest
     static void testOpportunityTrigger() {
         // Create a test Account
-        Account testAccount = new Account(Name = 'Test Account',Phone =);
+        Account testAccount = new Account(Name = 'Test Account',Phone = '000-000-0000');
 
         try {
             insert testAccount;
