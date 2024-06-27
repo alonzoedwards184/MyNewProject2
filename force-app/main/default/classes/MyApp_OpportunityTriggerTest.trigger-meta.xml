@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ApexTrigger xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>54.0</apiVersion> <!-- Update with your Salesforce API version -->
-    <status>Active</status> <!-- Set the status of the trigger -->
-    <fullName>CreateTaskOnAccountInsert</fullName> <!-- Replace with your trigger's API name -->
-</ApexTrigger>
+<ApexClass xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion> <!-- Replace with your desired Salesforce API version -->
+    <status>Active</status> <!-- Set the status of the Apex class -->
+</ApexClass>
