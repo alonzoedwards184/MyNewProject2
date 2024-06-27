@@ -1,5 +1,6 @@
 @isTest
 public class AccountInsertionTest {
+
     @isTest
     static void testCreateNewAccount_Success() {
         // Test case for successful account creation
@@ -13,5 +14,21 @@ public class AccountInsertionTest {
         System.assertEquals('123-456-7890', insertedAccount.Phone);
         System.assertEquals('http://www.example.com', insertedAccount.Website);
         System.assertEquals('Customer', insertedAccount.Type);
+    }
+
+    @isTest
+    static void testCreateNewAccount_ErrorHandling() {
+        // Test case for error handling during account creation
+        Test.startTest();
+        try {
+            AccountInsertion.createNewAccount('Test Account', '123-456-7890', 'http://www.example.com', 'Customer');
+            // Inserting an account with a duplicate name should throw an exception
+            AccountInsertion.createNewAccount('Test Account', '999-888-7777', 'http://www.error.com', 'Partner');
+        } catch (Exception e) {
+            // The actual exception message may differ; adapt based on your Salesforce validation rules
+            String expectedErrorMessage = 'FIELD_CUSTOM_VALIDATION_EXCEPTION, Account with this name already exists: []';
+            System.assert(e.getMessage().contains('FIELD_CUSTOM_VALIDATION_EXCEPTION'), 'Exception does not match expected');
+        }
+        Test.stopTest();
     }
 }
