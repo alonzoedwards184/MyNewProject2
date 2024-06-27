@@ -1,4 +1,4 @@
-trigger myapp_OpportunityTrigger on Opportunity (before insert, before update) {
+trigger myapp_OpportunityTrigger on Opportunity (after insert, before update) {
     List<Task> newTasks = new List<Task>();
     Set<Id> accountIds = new Set<Id>();
 
@@ -24,7 +24,16 @@ trigger myapp_OpportunityTrigger on Opportunity (before insert, before update) {
     }
 
     // Add Tasks to the Opportunities
+    List<Opportunity> updatedOpps = new List<Opportunity>();
     for (Opportunity opp : Trigger.new) {
-        opp.Description = 'Created ' + newTasks.size() + ' task(s) for follow-up with account ' + accountMap.get(opp.AccountId).Name;
+        if (opp.Probability >= 90 && accountMap.containsKey(opp.AccountId)) {
+            opp.Description = 'Created ' + newTasks.size() + ' task(s) for follow-up with account ' + accountMap.get(opp.AccountId).Name;
+            updatedOpps.add(opp);
+        }
+    }
+
+    // Update Opportunities with Task-related information
+    if (!updatedOpps.isEmpty()) {
+        update updatedOpps;
     }
 }
