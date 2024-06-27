@@ -5,7 +5,7 @@ public class AccountInsertionTest {
     static void testCreateNewAccount_Success() {
         // Test case for successful account creation
         Test.startTest();
-        AccountInsertion.createNewAccount('Test Account', '123-456-7890', 'http://www.example.com', 'Customer');
+        AccountInsertion.createNewAccount('Test Account', '123-456-7890', 'http://www.example.com', 'Prospect');
         Test.stopTest();
 
         // Verify the account was created
