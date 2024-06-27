@@ -15,6 +15,7 @@ trigger myapp_OpportunityTrigger on Account (after insert) {
         Task task = new Task();
         task.Subject = 'Make sure you get contact information';
         task.WhatId = acc.Id;
+        task.ActivityDate = System.today().addDays(15);
         tasksToInsert.add(task);
     }
     
@@ -24,6 +25,6 @@ trigger myapp_OpportunityTrigger on Account (after insert) {
     }
     if (!tasksToInsert.isEmpty()) {
         insert tasksToInsert;
-        
+
     }
 }
