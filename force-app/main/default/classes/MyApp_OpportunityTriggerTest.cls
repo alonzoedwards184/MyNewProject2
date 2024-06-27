@@ -1,5 +1,5 @@
 @isTest
-private class MyApp_OpportunityTriggerTest {
+private class myapp_OpportunityTriggerTest {
     @isTest static void testMyApp_OpportunityTrigger() {
         // Create test Account
         Account testAccount = new Account();
