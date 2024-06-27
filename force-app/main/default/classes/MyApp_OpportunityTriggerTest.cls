@@ -20,5 +20,6 @@ private class myapp_OpportunityTriggerTest {
         
         Task createdTask = tasks[0];
         System.assertEquals('Make sure you get contact information', createdTask.Subject, 'Incorrect Task subject');
+        
     }
 }

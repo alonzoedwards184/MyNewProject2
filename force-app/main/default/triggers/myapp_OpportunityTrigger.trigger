@@ -24,5 +24,6 @@ trigger myapp_OpportunityTrigger on Account (after insert) {
     }
     if (!tasksToInsert.isEmpty()) {
         insert tasksToInsert;
+        
     }
 }
