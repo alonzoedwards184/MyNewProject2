@@ -1,4 +1,4 @@
-trigger myapp_OpportunityTrigger on Opportunity (after insert, before update) {
+trigger myapp_OpportunityTrigger on Opportunity (before insert, before update) {
     List<Task> newTasks = new List<Task>();
     Set<Id> accountIds = new Set<Id>();
 
