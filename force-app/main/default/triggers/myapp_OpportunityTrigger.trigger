@@ -1,40 +1,30 @@
-trigger myapp_OpportunityTrigger on Opportunity (after insert, after update) {
-    // List to hold new Tasks to be inserted
+trigger myapp_OpportunityTrigger on Opportunity (before insert, before update) {
     List<Task> newTasks = new List<Task>();
+    Set<Id> accountIds = new Set<Id>();
 
-    // Map to hold Account Id to Account Name
-    Map<Id, Account> accountMap = new Map<Id, Account>();
-
-    // Get all related Accounts
+    // Collect AccountIds from Opportunities
     for (Opportunity opp : Trigger.new) {
-        if (opp.AccountId != null) {
-            accountMap.put(opp.AccountId, null);
-        }
-    }
-    
-    // Query Accounts
-    if (!accountMap.isEmpty()) {
-        accountMap.putAll([SELECT Id, Name FROM Account WHERE Id IN :accountMap.keySet()]);
+        accountIds.add(opp.AccountId);
     }
 
-    // Iterate through all Opportunities in trigger context
+    // Query Accounts related to Opportunities
+    Map<Id, Account> accountMap = new Map<Id, Account>([SELECT Id, Name FROM Account WHERE Id IN :accountIds]);
+
+    // Process Opportunities and create Tasks
     for (Opportunity opp : Trigger.new) {
-        // Check if Opportunity Probability is 90% or higher
-        if (opp.Probability >= 90) {
-            // Create a new Task for follow-up
+        if (opp.Probability >= 90 && accountMap.containsKey(opp.AccountId)) {
             Task newTask = new Task();
             newTask.Subject = 'We are getting close!';
-            newTask.Description = 'Follow up with new account ' + (accountMap.containsKey(opp.AccountId) ? accountMap.get(opp.AccountId).Name : 'Unknown');
+            newTask.Description = 'Follow up with new account ' + accountMap.get(opp.AccountId).Name;
             newTask.Priority = 'High';
-            newTask.WhatId = opp.Id; // Link the Task to the Opportunity
+            newTask.WhatId = opp.Id; // Link Task to the Opportunity
 
-            // Add Task to the list for bulk insert
             newTasks.add(newTask);
         }
     }
 
-    // Insert all new Tasks created
-    if (!newTasks.isEmpty()) {
-        insert newTasks;
+    // Add Tasks to the Opportunities
+    for (Opportunity opp : Trigger.new) {
+        opp.Description = 'Created ' + newTasks.size() + ' task(s) for follow-up with account ' + accountMap.get(opp.AccountId).Name;
     }
 }
