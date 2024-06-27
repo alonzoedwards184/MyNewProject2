@@ -1,4 +1,4 @@
-trigger OpportunityTrigger on Opportunity (after insert, after update) {
+trigger myapp_OpportunityTrigger on Opportunity (after insert, after update) {
     // List to hold new Tasks to be inserted
     List<Task> newTasks = new List<Task>();
 
