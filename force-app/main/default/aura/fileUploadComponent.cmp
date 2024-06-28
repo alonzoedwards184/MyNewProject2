@@ -1,4 +1,0 @@
-<!-- fileUploadComponent.cmp -->
-<aura:component controller="FileUploadController">
-    <input type="file" aura:id="fileUpload" onchange="{!c.handleFileUpload}"/>
-</aura:component>
