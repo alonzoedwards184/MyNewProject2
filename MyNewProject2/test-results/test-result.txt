@@ -1,0 +1,19 @@
+=== Test Summary
+NAME                 VALUE                        
+───────────────────  ─────────────────────────────
+Outcome              Passed                       
+Tests Ran            2                            
+Pass Rate            100%                         
+Fail Rate            0%                           
+Skip Rate            0%                           
+Test Run Id          707Oz00000La0wm              
+Test Execution Time  667 ms                       
+Org Id               00DOz000002ezurMAA           
+Username             test-wr3teizpb1qx@example.com
+
+
+=== Test Results
+TEST NAME                                                      OUTCOME  MESSAGE  RUNTIME (MS)
+─────────────────────────────────────────────────────────────  ───────  ───────  ────────────
+myapp_AccountInsertionTest.testCreateNewAccount_ErrorHandling  Pass              544         
+myapp_AccountInsertionTest.testCreateNewAccount_Success        Pass              123         
