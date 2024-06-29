@@ -4,5 +4,6 @@
         var fileName = uploadedFiles[0].name;
         component.set("v.fileName", fileName);
         helper.processFileUpload(component, fileName);
+        
     }
 })
