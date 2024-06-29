@@ -1,0 +1,4 @@
+<aura:component controller="FileUploadController" implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
+    <aura:attribute name="fileName" type="String" />
+    <lightning:fileUpload label="Upload File" recordId="{!v.recordId}" multiple="false" onuploadfinished="{!c.handleFileUpload}" />
+</aura:component>
