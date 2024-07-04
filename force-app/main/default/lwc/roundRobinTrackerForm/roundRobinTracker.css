@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Adjust the height as needed */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.slds-form-element {
+    width: 100%; /* Adjust the width of form elements */
+    max-width: 300px; /* Maximum width for form elements */
+    margin-bottom: 15px; /* Margin between form elements */
+}
+
+.slds-button {
+    margin-top: 15px; /* Margin above the button */
+}
