@@ -4,9 +4,8 @@ import { loadStyle } from 'lightning/platformResourceLoader';
 import ROUND_ROBIN_TRACKER_OBJECT from '@salesforce/schema/Round_Robin_Tracker__c';
 import ORDER_FIELD from '@salesforce/schema/Round_Robin_Tracker__c.Order__c';
 import CURRENT_ASSIGNEE_FIELD from '@salesforce/schema/Round_Robin_Tracker__c.Current_Assignee__c';
-import getUsers from '@salesforce/apex/RoundRobinTrackerController.getUsers'; // Update to getUsers
-
-import roundRobinTrackerStyles from './roundRobinTracker.css'; // Adjust the path relative to your component
+import getUsers from '@salesforce/apex/RoundRobinTrackerController.getUsers';
+import roundRobinTrackerStyles from './roundRobinTrackerForm.css'; // Adjust relative path as needed
 
 export default class RoundRobinTrackerForm extends LightningElement {
     @track order;
@@ -14,7 +13,7 @@ export default class RoundRobinTrackerForm extends LightningElement {
     @track userOptions = [];
 
     connectedCallback() {
-        this.fetchUsers(); // Change to fetch users instead of groups
+        this.fetchUsers();
         this.loadStyles();
     }
 
