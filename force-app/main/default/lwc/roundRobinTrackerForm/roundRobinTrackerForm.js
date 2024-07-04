@@ -4,18 +4,17 @@ import { loadStyle } from 'lightning/platformResourceLoader';
 import ROUND_ROBIN_TRACKER_OBJECT from '@salesforce/schema/Round_Robin_Tracker__c';
 import ORDER_FIELD from '@salesforce/schema/Round_Robin_Tracker__c.Order__c';
 import CURRENT_ASSIGNEE_FIELD from '@salesforce/schema/Round_Robin_Tracker__c.Current_Assignee__c';
-import getGroupMembers from '@salesforce/apex/RoundRobinTrackerController.getGroupMembers';
-import roundRobinTrackerStyles from '@salesforce/resourceUrl/roundRobinTracker'; // Adjust the resource URL as needed
+import getUsers from '@salesforce/apex/RoundRobinTrackerController.getUsers'; // Update to getUsers
+
+import roundRobinTrackerStyles from './roundRobinTracker.css'; // Adjust the path relative to your component
 
 export default class RoundRobinTrackerForm extends LightningElement {
     @track order;
     @track currentAssignee;
     @track userOptions = [];
 
-    groupId = '00Gxxxxxxxxxxxx'; // Replace with your Group ID
-
     connectedCallback() {
-        this.fetchGroupMembers();
+        this.fetchUsers(); // Change to fetch users instead of groups
         this.loadStyles();
     }
 
@@ -27,18 +26,18 @@ export default class RoundRobinTrackerForm extends LightningElement {
         });
     }
 
-    fetchGroupMembers() {
-        getGroupMembers({ groupId: this.groupId })
+    fetchUsers() {
+        getUsers()
             .then(result => {
                 this.userOptions = result.map(user => {
                     return { label: user.Name, value: user.Id };
                 });
                 if (this.userOptions.length > 0) {
-                    this.currentAssignee = this.userOptions[0].value;
+                    this.currentAssignee = this.userOptions[0].value; // Set default value if needed
                 }
             })
             .catch(error => {
-                console.error('Error fetching group members: ', error);
+                console.error('Error fetching users: ', error);
             });
     }
 
@@ -47,7 +46,7 @@ export default class RoundRobinTrackerForm extends LightningElement {
         if (field === 'order') {
             this.order = event.target.value;
         } else if (field === 'currentAssignee') {
-            this.currentAssignee = event.target.value;
+            this.currentAssignee = event.detail.value; // Update currentAssignee with selected value
         }
     }
 
