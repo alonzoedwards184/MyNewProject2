@@ -1,9 +1,26 @@
 <template>
     <lightning-card title="New Round Robin Tracker">
         <div class="slds-m-around_medium">
-            <lightning-input label="Current Assignee" value={currentAssignee} onchange={handleInputChange} data-id="currentAssignee"></lightning-input>
-            <lightning-input label="Order" type="number" value={order} onchange={handleInputChange} data-id="order"></lightning-input>
-            <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+            <lightning-combobox 
+                label="Current Assignee" 
+                value={currentAssignee} 
+                placeholder="Select Assignee"
+                options={userOptions} 
+                onchange={handleInputChange} 
+                data-id="currentAssignee">
+            </lightning-combobox>
+            <lightning-input 
+                label="Order" 
+                type="number" 
+                value={order} 
+                onchange={handleInputChange} 
+                data-id="order">
+            </lightning-input>
+            <lightning-button 
+                variant="brand" 
+                label="Save" 
+                onclick={handleSave}>
+            </lightning-button>
         </div>
     </lightning-card>
 </template>
