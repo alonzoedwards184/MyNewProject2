@@ -1,3 +1,4 @@
+// RoundRobinTrackerForm.js
 import { LightningElement, track, wire } from 'lwc';
 import { createRecord } from 'lightning/uiRecordApi';
 import { loadStyle } from 'lightning/platformResourceLoader';
@@ -6,11 +7,13 @@ import ORDER_FIELD from '@salesforce/schema/Round_Robin_Tracker__c.Order__c';
 import CURRENT_ASSIGNEE_FIELD from '@salesforce/schema/Round_Robin_Tracker__c.Current_Assignee__c';
 import getUsers from '@salesforce/apex/RoundRobinTrackerController.getUsers';
 import roundRobinTrackerStyles from './roundRobinTrackerForm.css'; // Adjust relative path as needed
+import RoundRobinUtility from './RoundRobinUtility';
 
 export default class RoundRobinTrackerForm extends LightningElement {
     @track order;
     @track currentAssignee;
     @track userOptions = [];
+    roundRobinUtility;
 
     connectedCallback() {
         this.fetchUsers();
@@ -34,6 +37,7 @@ export default class RoundRobinTrackerForm extends LightningElement {
                 if (this.userOptions.length > 0) {
                     this.currentAssignee = this.userOptions[0].value; // Set default value if needed
                 }
+                this.roundRobinUtility = new RoundRobinUtility(this.userOptions);
             })
             .catch(error => {
                 console.error('Error fetching users: ', error);
@@ -50,17 +54,27 @@ export default class RoundRobinTrackerForm extends LightningElement {
     }
 
     handleSave() {
-        const fields = {};
-        fields[ORDER_FIELD.fieldApiName] = this.order;
-        fields[CURRENT_ASSIGNEE_FIELD.fieldApiName] = this.currentAssignee;
+        try {
+            this.roundRobinUtility.getNextAssignee()
+                .then(({ order, assigneeId }) => {
+                    const fields = {};
+                    fields[ORDER_FIELD.fieldApiName] = order; // Set the order field with the calculated order number
+                    fields[CURRENT_ASSIGNEE_FIELD.fieldApiName] = assigneeId;
 
-        const recordInput = { apiName: ROUND_ROBIN_TRACKER_OBJECT.objectApiName, fields };
-        createRecord(recordInput)
-            .then(record => {
-                console.log('Record created with Id: ' + record.id);
-            })
-            .catch(error => {
-                console.error('Error creating record: ' + error.body.message);
-            });
+                    const recordInput = { apiName: ROUND_ROBIN_TRACKER_OBJECT.objectApiName, fields };
+                    createRecord(recordInput)
+                        .then(record => {
+                            console.log('Record created with Id: ' + record.id);
+                        })
+                        .catch(error => {
+                            console.error('Error creating record: ' + error.body.message);
+                        });
+                })
+                .catch(error => {
+                    console.error('Error getting next assignee: ', error.message);
+                });
+        } catch (error) {
+            console.error('Error getting next assignee: ', error.message);
+        }
     }
 }
