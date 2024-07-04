@@ -9,9 +9,8 @@ export default class RoundRobinTrackerForm extends LightningElement {
     @track order;
     @track currentAssignee;
     @track userOptions = [];
-    @track error;
 
-    groupId = '00Gbm0000031LezEAE'; // Replace with your Group ID
+    groupId = '00Gxxxxxxxxxxxx'; // Replace with your Group ID
 
     connectedCallback() {
         this.fetchGroupMembers();
@@ -23,9 +22,11 @@ export default class RoundRobinTrackerForm extends LightningElement {
                 this.userOptions = result.map(user => {
                     return { label: user.Name, value: user.Id };
                 });
+                if (this.userOptions.length > 0) {
+                    this.currentAssignee = this.userOptions[0].value;
+                }
             })
             .catch(error => {
-                this.error = error;
                 console.error('Error fetching group members: ', error);
             });
     }
