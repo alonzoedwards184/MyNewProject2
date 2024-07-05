@@ -2,7 +2,7 @@ public with sharing class RoundRobinTrackerController {
     
     @AuraEnabled(cacheable=true)
     public static List<User> getUsers() {
-        return [SELECT Id, Name FROM User WHERE IsActive = true LIMIT 10];
+        return [SELECT Id, Name FROM User WHERE IsActive = true];
     }
     
     @AuraEnabled
@@ -37,32 +37,4 @@ public with sharing class RoundRobinTrackerController {
         return !existingRecords.isEmpty();
     }
     
-    @AuraEnabled
-    public static void updateOpportunityOwner(String opportunityId, Id newAssigneeId, Integer newOrder) {
-        try {
-            // Retrieve the Opportunity record
-            Opportunity opp = [SELECT Id, OwnerId FROM Opportunity WHERE Id = :opportunityId];
-            
-            // Update the Opportunity fields
-            opp.OwnerId = newAssigneeId;
-            
-            // Update the Opportunity record
-            update opp;
-            
-            // Update Round Robin Tracker record with new order
-            Round_Robin_Tracker__c roundRobinRecord = [
-                SELECT Id 
-                FROM Round_Robin_Tracker__c 
-                WHERE Current_Assignee__c = :newAssigneeId
-                ORDER BY Last_Assigned_Date__c DESC
-                LIMIT 1
-            ];
-            if (roundRobinRecord != null) {
-                roundRobinRecord.Order__c = newOrder;
-                update roundRobinRecord;
-            }
-        } catch (Exception e) {
-            throw new AuraHandledException('Error updating Opportunity owner: ' + e.getMessage());
-        }
-    }
 }

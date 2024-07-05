@@ -1,13 +1,6 @@
 <template>
     <lightning-card title="New Round Robin Tracker">
         <div class="slds-m-around_medium">
-            <!-- Display error message if errorMessage is defined -->
-            <template if:true={errorMessage}>
-                <div class="slds-theme_error">
-                    <p class="slds-text-color_inverse">{errorMessage}</p>
-                </div>
-            </template>
-
             <lightning-combobox 
                 label="Current Assignee" 
                 value={currentAssignee} 
@@ -16,7 +9,6 @@
                 onchange={handleInputChange} 
                 data-id="currentAssignee">
             </lightning-combobox>
-            
             <lightning-button 
                 variant="brand" 
                 label="Save" 
