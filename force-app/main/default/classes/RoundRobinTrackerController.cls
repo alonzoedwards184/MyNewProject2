@@ -18,6 +18,7 @@ public with sharing class RoundRobinTrackerController {
             newRecord.Order__c = nextOrder;
             newRecord.Current_Assignee__c = currentAssignee;
             newRecord.Last_Assigned_Date__c = DateTime.now();
+            newRecord.Is_Active__c = True;
             
             insert newRecord;
             

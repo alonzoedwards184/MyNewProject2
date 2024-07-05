@@ -1,26 +1,26 @@
-public with sharing class OpportunityController {
+public class OpportunityController {
 
-    @AuraEnabled
-    public static void updateOpportunityOwner(Id opportunityId, Id newOwnerId, Integer newOrder) {
-        try {
-            Opportunity opp = [SELECT Id, OwnerId FROM Opportunity WHERE Id = :opportunityId];
-            opp.OwnerId = newOwnerId;
-            update opp;
-            
-            // Update Round Robin Tracker record with new order
-            Round_Robin_Tracker__c roundRobinRecord = [
-                SELECT Id 
-                FROM Round_Robin_Tracker__c 
-                WHERE Current_Assignee__c = :newOwnerId
-                ORDER BY Last_Assigned_Date__c DESC
-                LIMIT 1
-            ];
-            if (roundRobinRecord != null) {
-                roundRobinRecord.Order__c = newOrder;
-                update roundRobinRecord;
+    public static void AssignOwner(List<Opportunity> Opps) {
+        List<Round_Robin_Tracker__c> SARAssignees = [SELECT Current_Assignee__c, Last_Assigned_Date__c
+                                                     FROM Round_Robin_Tracker__c
+                                                     WHERE Current_Assignee__r.isActive = True 
+                                                     ORDER BY Last_Assigned_Date__c ASC, Order__c ASC];
+
+        if (!SARAssignees.isEmpty()) {
+            List<Round_Robin_Tracker__c> RRAssigneesToUpdate = new List<Round_Robin_Tracker__c>();
+            Integer CSRindex = 0;
+
+            for (Opportunity opp : Opps) {
+                Round_Robin_Tracker__c RRAssignee = SARAssignees.get(Math.mod(CSRindex, SARAssignees.size()));
+                opp.OwnerId = RRAssignee.Current_Assignee__c;
+
+                RRAssignee.Last_Assigned_Date__c = System.now();
+
+                RRAssigneesToUpdate.add(RRAssignee);
+                CSRindex++;
             }
-        } catch (Exception e) {
-            throw new AuraHandledException('Error updating Opportunity owner: ' + e.getMessage());
+
+            update RRAssigneesToUpdate;
         }
     }
 }
